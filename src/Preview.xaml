@@ -1,0 +1,264 @@
+<Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{DynamicResource StageBrush}"
+      UseLayoutRounding="True" SnapsToDevicePixels="True">
+    <Grid.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Width" Value="9" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="Transparent">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True" Orientation="{TemplateBinding Orientation}"
+                                   Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" ViewportSize="{TemplateBinding ViewportSize}"
+                                   Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Opacity="0" Focusable="False" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Focusable="False">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="{DynamicResource ScrollThumbBrush}" Margin="2,3" CornerRadius="3" />
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Opacity="0" Focusable="False" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SurfaceMenu" TargetType="ContextMenu">
+            <Setter Property="MinWidth" Value="208" />
+            <Setter Property="MaxWidth" Value="330" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HasDropShadow" Value="False" />
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ContextMenu">
+                        <Border Background="{DynamicResource MenuBrush}" BorderBrush="{DynamicResource MenuLineBrush}"
+                                BorderThickness="1" CornerRadius="13" Padding="6" SnapsToDevicePixels="True">
+                            <DockPanel KeyboardNavigation.DirectionalNavigation="Cycle">
+                                <ContentPresenter Content="{TemplateBinding Tag}" DockPanel.Dock="Top" />
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" MaxHeight="350">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </DockPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SurfaceMenuItem" TargetType="MenuItem">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Padding" Value="9,7" />
+            <Setter Property="MinHeight" Value="35" />
+            <Setter Property="Margin" Value="0,1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="MenuItem">
+                        <Border x:Name="Row" Background="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <DockPanel LastChildFill="True">
+                                <TextBlock x:Name="CheckMark" Text="✓" Visibility="Collapsed" Margin="10,0,1,0" DockPanel.Dock="Right"
+                                           Foreground="{DynamicResource TransferBrush}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                <TextBlock x:Name="Shortcut" Text="{TemplateBinding InputGestureText}" Margin="12,0,1,0" DockPanel.Dock="Right"
+                                           Foreground="{DynamicResource MutedBrush}" FontSize="11" VerticalAlignment="Center" />
+                                <ContentPresenter ContentSource="Header" RecognizesAccessKey="True" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="InputGestureText" Value="">
+                                <Setter TargetName="Shortcut" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Row" Property="Background" Value="{DynamicResource MenuHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Row" Property="Background" Value="{DynamicResource MenuHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Row" Property="Opacity" Value="0.7" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ToolTip">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="HasDropShadow" Value="False" />
+            <Setter Property="MaxWidth" Value="390" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border Background="{DynamicResource MenuBrush}" BorderBrush="{DynamicResource MenuLineBrush}"
+                                BorderThickness="1" CornerRadius="7" Padding="8,6">
+                            <TextBlock Text="{TemplateBinding Content}" FontSize="12" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SurfaceSeparator" TargetType="Separator">
+            <Setter Property="Margin" Value="6,4" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Separator">
+                        <Border Height="1" Background="{DynamicResource MenuLineBrush}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="EditorTextBox" TargetType="TextBox">
+            <Setter Property="SelectionBrush" Value="{DynamicResource SelectionBrush}" />
+            <Setter Property="CaretBrush" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="EditorOutline" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="False" Margin="{TemplateBinding Padding}"
+                                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+                                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="EditorOutline" Property="BorderBrush" Value="{DynamicResource MainOutlineBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="QuietButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,6" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface" CornerRadius="8" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="{DynamicResource HoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Surface" Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.48" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="AccentButton" TargetType="Button" BasedOn="{StaticResource QuietButton}">
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Surface" CornerRadius="8" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Surface" Property="Background" Value="{DynamicResource AccentHoverBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Surface" Property="BorderBrush" Value="White" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Surface" Property="Background" Value="{DynamicResource HoverBrush}" />
+                                <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Grid.Resources>
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="52" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="34" />
+    </Grid.RowDefinitions>
+
+    <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,0,0,1">
+        <DockPanel Margin="8,0" LastChildFill="False">
+            <Button x:Name="HistoryButton" DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Padding="8,6" Content="历史记录" ToolTip="打开历史记录 (Ctrl+H)" VerticalAlignment="Center" />
+            <Button x:Name="NewButton" DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Padding="8,6" Content="新对话" ToolTip="开始新对话 (Ctrl+N)" VerticalAlignment="Center" />
+            <Button x:Name="ProjectButton" DockPanel.Dock="Left" Style="{StaticResource QuietButton}" Padding="8,6" Content="项目 ▾" ToolTip="选择本次 Agent 工作目录" VerticalAlignment="Center" />
+            <Button x:Name="ThemeButton" DockPanel.Dock="Right" Style="{StaticResource QuietButton}" Padding="9,6" AutomationProperties.Name="切换主题" VerticalAlignment="Center" />
+            <Button x:Name="AddAgentButton" DockPanel.Dock="Right" Style="{StaticResource AccentButton}" Content="＋ 添加 Agent" Padding="8,6" VerticalAlignment="Center"
+                    Margin="0,0,5,0" ToolTipService.ShowOnDisabled="True" />
+            <Button x:Name="ConnectButton" DockPanel.Dock="Right" Style="{StaticResource QuietButton}" Content="一键连接" Padding="8,6"
+                    Margin="0,0,4,0" ToolTipService.ShowOnDisabled="True" VerticalAlignment="Center" />
+        </DockPanel>
+    </Border>
+
+    <Canvas x:Name="Stage" Grid.Row="1" Background="Transparent" ClipToBounds="True" AutomationProperties.Name="聊天工作区">
+        <Border x:Name="DropHint" Visibility="Collapsed" IsHitTestVisible="False" Panel.ZIndex="2" CornerRadius="13"
+                BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" Background="{DynamicResource HintBrush}" />
+    </Canvas>
+
+    <DockPanel Grid.Row="2" LastChildFill="True" Margin="13,0">
+        <TextBlock x:Name="PaneCount" DockPanel.Dock="Right" Foreground="{DynamicResource MutedBrush}" FontSize="11" VerticalAlignment="Center" />
+        <Button x:Name="LaunchAgentButton" DockPanel.Dock="Right" Style="{StaticResource QuietButton}" Content="一键打开 ▾"
+                ToolTip="打开官方 Agent 窗口，或检测、修改启动路径" Margin="3,0,10,0" MinHeight="28" Padding="8,2" VerticalAlignment="Center" />
+        <Button x:Name="AgentInventoryButton" DockPanel.Dock="Right" Style="{StaticResource QuietButton}" Content="安装检测"
+                ToolTip="检测所有支持的 Agent 并查看官方安装教程" MinHeight="28" Padding="8,2" VerticalAlignment="Center" />
+        <TextBlock x:Name="Status" Text="本机连接" Foreground="{DynamicResource MutedBrush}" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+    </DockPanel>
+
+    <Grid x:Name="HistoryLayer" Grid.RowSpan="3" Panel.ZIndex="5" Visibility="Collapsed">
+        <Border x:Name="HistoryBackdrop" Background="{DynamicResource ScrimBrush}" />
+        <Border HorizontalAlignment="Left" Width="304" Margin="10,61,0,10" CornerRadius="14" Background="{DynamicResource MenuBrush}"
+                BorderBrush="{DynamicResource MenuLineBrush}" BorderThickness="1">
+            <Grid Margin="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <DockPanel LastChildFill="True">
+                    <Button x:Name="CloseHistoryButton" DockPanel.Dock="Right" Style="{StaticResource QuietButton}" Content="×" FontSize="18"
+                            ToolTip="关闭历史记录 (Esc)" AutomationProperties.Name="关闭历史记录" VerticalAlignment="Center" />
+                    <TextBlock Text="历史记录" FontSize="19" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}" Margin="6,0,0,0" VerticalAlignment="Center" />
+                </DockPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="2,0,0,3">
+                    <Button x:Name="RecentHistoryButton" Content="最近" Style="{StaticResource QuietButton}" MinWidth="68" Margin="0,0,6,0" />
+                    <Button x:Name="ArchivedHistoryButton" Content="已归档" Style="{StaticResource QuietButton}" MinWidth="78" />
+                </StackPanel>
+                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="HistoryList" Margin="0,8,0,0" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+    <Border x:Name="DialogBackdrop" Grid.RowSpan="3" Panel.ZIndex="20" Visibility="Collapsed"
+            Background="{DynamicResource ScrimBrush}" />
+</Grid>
+
