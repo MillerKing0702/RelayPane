@@ -1,5 +1,7 @@
 # RelayPane
 
+**简体中文** · [English](README.en.md)
+
 一个 Windows 桌面应用，让多个 AI Agent 在同一个工作区里分工。你选一个主 Agent，由它分派工作和汇总结果，也可以随时点名让某个辅助 Agent 接手。
 
 ![RelayPane 的深色、浅色工作区和安装检测演示](docs/media/workspace-demo.gif)
@@ -16,7 +18,7 @@
 ## 快速上手
 
 1. 在 Windows 上准备 .NET Framework 4.8 和 Node.js 20 或更新版本。
-2. 如果 [Releases](../../releases) 已提供 EXE，可以下载 Windows ZIP，解压后进入 RelayPane-1.0 文件夹运行 RelayPane.exe。也可以按下文从源码构建。
+2. 从 [Releases](https://github.com/MillerKing0702/RelayPane/releases) 下载 Windows ZIP，解压后打开 `RelayPane-1.0` 文件夹，运行 `RelayPane.exe`。也可以按下文从源码构建。
 3. 打开「安装检测」，安装并登录你需要的 Agent。「一键检测」检查本机入口，聊天页的连接检测会与所选 Agent 握手。
 4. 新建对话，选主 Agent 和辅助 Agent，在「项目」选择工作目录。可以直接聊天，也可以用 `@Agent名称` 点名派发。
 

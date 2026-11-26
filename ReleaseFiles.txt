@@ -1,5 +1,6 @@
 .gitignore
 README.md
+README.en.md
 LICENSE
 ReleaseFiles.txt
 Export-Source.ps1
